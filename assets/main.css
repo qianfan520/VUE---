@@ -1,0 +1,21 @@
+/* 这个文件主要用来展示每个页面切换的过渡效果
+    当然,还有更多的切换过渡效果
+    详见:https://zh.nuxtjs.org/guide/routing#
+*/
+
+
+/* 页面切换时候过渡样式 */
+.page-enter-active, .page-leave-active {
+    transition: opacity .5s;
+}
+
+/* 打开时候过渡样式 */
+.page-enter, .page-leave-active {
+    opacity: 0;
+}
+
+/* 页面顶部页面加载进度条 */
+.nuxt-progress{
+    background:#409eff;
+    height: 1px;
+}
