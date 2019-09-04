@@ -14,7 +14,7 @@ import Header from "@/components/header.vue";
 // 引入footer底部组件
 import Footer from "@/components/footer.vue";
 export default {
-  //既然导入了组件,那么就要一定要注册这个导入的组件
+  //既然导入了组件,那么就要一定要注册已经导入的组件,可以不用传参
   components: {
     Header,
     Footer

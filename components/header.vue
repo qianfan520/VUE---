@@ -2,7 +2,6 @@
   <div class="container">
     <!-- justify-content:space-between:让元素左右对齐 -->
     <el-row type="flex" class="main" jjustify="space-between">
-     
       <!-- 头部logo板块 -->
       <div class="logo">
         <img src="http://157.122.54.189:9093/images/logo.jpg" alt="陈二狗" />
@@ -11,12 +10,23 @@
       <!-- 头部分类板块 -->
       <el-row type="flex" class="navs">
         <!-- nuxt-link的作用和使用方式和router-link一样 -->
-         <nuxt-link to="/index">首页</nuxt-link>
+        <nuxt-link to="/index">首页</nuxt-link>
         <nuxt-link to="/post">旅游攻略</nuxt-link>
         <nuxt-link to="/hotel">酒店</nuxt-link>
         <nuxt-link to="/air">国内机票</nuxt-link>
       </el-row>
 
+      <!-- 如果用户存在,展示用户信息,数据来之state -->
+      <el-dropdown v-if="$store.state.user.userInfo.token">
+        <el-row type="flex" align="middle" class="el-dropdown-link">
+          <nuxt-link to="#">
+            <img :src="$axios.defaults.baseURL + $store.state.user.userInfo.user.defaultAvatar" />
+            {{$store.state.user.userInfo.user.nickname}}
+          </nuxt-link>
+          <i class="el-icon-caret-bottom el-icon--right"></i>
+        </el-row>
+        <!-- 其他代码... -->
+      </el-dropdown>
       <!-- 头部登入跳转板块 -->
       <div>
         <nuxt-link to="/user/login">登录/注册</nuxt-link>
@@ -26,7 +36,19 @@
 </template>
 
 <script>
-export default {};
+export default {
+  methods:{
+    //用户退出
+    handleLogout(){
+     const {commit} = this.$store;
+     commit('user/cleanUserInfo');
+     this.$message({
+       message:'退出成功',
+       type:'success'
+     })
+    }
+  }
+};
 </script>
 
 <style lang='less' scoped>
