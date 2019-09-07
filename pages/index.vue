@@ -1,135 +1,128 @@
 <template>
-  <!-- 这个文件用来展示网站首页的内容 -->
   <div class="container">
-    <!-- el-carousel:轮播图组件的意思  
-  arrow:左右切换箭头总是显示 
-    interval:图片切换间隔时间-->
-    <el-carousel :interval="1000" arrow="always">
-      <!-- l-carousel-item:指幻灯片的每一项 -->
-      <el-carousel-item v-for="(item,index) in banners " :key="index">
-        <h3>{{ item }}</h3>
-        <!-- 以下是轮播图的背景图片区域 -->
-        <!-- background-size：控制背景图片的大小，自适应宽高 -->
+    <!-- 轮播图组件 -->
+    <!-- interval:轮播图切换间隔时间
+    arrow:轮播图的左右箭头总是显示-->
+    <el-carousel :interval="5000" arrow="always">
+      <!-- el-carousel-item:指的是轮播图的每一项 -->
+      <el-carousel-item v-for="(item, index) in banners" :key="index">
+        <!-- 轮播图的背景图片设置
+        background-size:指的是背景图片大小,自适应宽高-->
         <div
           class="banner-image"
           :style="`
-            background:url(${ $axios.defaults.baseURL + item.url}) center center no-repeat;
-            background-size:contain contain;`"
-        ></div>
+                background:url(${$axios.default.baseURL + item.url}) center center no-repeat;
+                background-size:contain contain;
+                `"></div>
       </el-carousel-item>
     </el-carousel>
-    <!-- 网站首页搜索区域 -->
+
+    <!-- 搜索框 -->
     <div class="banner-content">
       <div class="search-bar">
-        <!-- tab栏区域 -->
+
+        <!-- tab栏 
+        ps:动态的CLASS,当前的索引和循环的索引相等的时候要加上active -->
         <el-row type="flex" class="search-tab">
-          <span
-            v-for="(item,index) in options"
-            :key="index"
-            @click="handleClick(click)"
-            :class="{active:current === index}"
-          >
-            <i>{{item.title}}</i>
-          </span>
+          <span v-for="(item,index) in options" 
+          :key="index" 
+          @click="handleClick(index)"  
+          :class="{ active: current === index }">
+          <i>{{ item.title }}</i></span>
         </el-row>
 
-        <!-- 网站首页输入框区域 -->
+        <!-- 输入框 -->
         <el-row type="flex" align="middle" class="search-input">
+          <!-- ?????????????????????????? -->
           <input :placeholder="options[current].placeholder" />
-          <i class="el-icon-search"></i>
+          <i class="el-icon-search" ></i>
         </el-row>
       </div>
     </div>
   </div>
 </template>
+
 <script>
 export default {
-  data: {
-    return: {
-      //开始实现轮播的效果
-      // 1.给所有图片创建一个数组
+  data() {
+    return {
+      //轮播图数组
       banners: [
-        "http://157.122.54.189:9095/assets/images/th01.jfif",
-        "http://157.122.54.189:9095/assets/images/th02.jfif",
-        "http://157.122.54.189:9095/assets/images/th03.jfif"
+        //"http://157.122.54.189:9095/assets/images/th01.jfif",
+        //"http://157.122.54.189:9095/assets/images/th02.jfif",
+        //"http://157.122.54.189:9095/assets/images/th03.jfif"
       ],
-      // 定义搜索TAB切换的数据
+
+      //定义搜索TAB切换的数据
       options: [
         {
-          name: "攻略",
-          placeholder: "搜索城市",
-          pageUrl: "/post?city="
+          title: "攻略",
+          placeholder: "请输入城市"
         },
         {
-          name: "酒店",
-          placeholder: "请输入城市搜索酒店",
-          pageUrl: "/hotel?city="
+          title: "城市",
+          placeholder: "请输入城市搜索酒店"
         },
         {
-          name: "机票",
-          placeholder: "请输入出发地",
-          pageUrl: "/air"
+          title: "机票",
+          placeholder: ""
         }
       ],
-      //设置索引值,当current=0的时候,就显示攻略,等于1 的时候就显示酒店
-      searchValue: "", // 搜索框的值
-      currentOption: 0 // 当前选中的选项
-    }
+
+      // 当前的索引参数 当=0 的时候就显示攻略 =1的时候就是酒店
+      current: 0
+    };
   },
-  mounted() {
-    // 2.请求轮播图的数据
-    // 该写法是一种通用的标准，nuxt帮我们封装好了。
-    // vue.prototype.$axios = axios;
-    this.$axio({
-      url: "/scenics/banners"
-    }).then(res => {
-      // 3.获取轮播图的数组
-      // const data = res.data.data; 可以解构为下行代码
-      const {data} = res.data;  
-      // 4.赋值给banners
-      this.banners = data;
-    });
-    console.dir(this.$axios);
-  },
+
+//方法
   methods: {
-    //设置点击搜索的TAB栏是触发
+    //点击搜索的tab栏触发
     handleClick(index) {
-      //设置点击索引2的时候,代表点击是机票
-      if (index === 2) {
-        // 路由规则虽然pages可以直接访问，不需要配置
-        // 但是可以通用路由的方法
-        this.$router.push("/air");
+      //当点击索引是2的时候,代表点击就是跳转机票页面
+      if(index === 2){
+        //nuxt已经设置好了router,所以就不用了在单独设置ROUTER
+        this.$router.push('/air')
       }
+
       //把当前点击的索引赋值给current
       this.current = index;
-    },
-    // 切换tab栏触发
-    handleOption(index) {
-      // 设置当前tab
-      this.currentOption = index;
-      如果切换的是机票tavern;
-    },
-    // 搜索的时候触发
-    handleSearch() {
-      const item = this.options[this.currentOption];
-      //跳转的时候给对应的页面url加上搜索内容参数
-      this.$router.push(item.pageUrl + this.searchValue);
     }
+  },
+
+// 钩子函数
+  mounted() {
+    //请求轮播图的数据
+    //  this.$axios  通用写法 nuxt帮我们已经封装好
+    this.$axios({
+      url: "/scenics/banners" //管理后台
+    }).then(res => {
+      //获取轮播图的数组
+      // console.log(res) 可解构为下行代码
+      const data = res.data.data;
+      // const { data } = res.data;
+
+      // 赋值给banners
+      this.banners = data;
+    });
   }
 };
 </script>
+
 <style scoped lang="less">
 .container {
   min-width: 1000px;
   margin: 0 auto;
   position: relative;
+
   /deep/ .el-carousel__container {
     height: 700px;
   }
+
   .banner-image {
     width: 100%;
     height: 100%;
   }
+
   .banner-content {
     z-index: 9;
     width: 1000px;
@@ -138,10 +131,12 @@ export default {
     top: 45%;
     margin-left: -500px;
     border-top: 1px transparent solid;
+
     .search-bar {
       width: 552px;
       margin: 0 auto;
     }
+
     .search-tab {
       .active {
         i {
@@ -151,6 +146,7 @@ export default {
           background: #eee;
         }
       }
+
       span {
         width: 82px;
         height: 36px;
@@ -158,6 +154,7 @@ export default {
         position: relative;
         margin-right: 8px;
         cursor: pointer;
+
         i {
           position: absolute;
           z-index: 2;
@@ -168,6 +165,7 @@ export default {
           text-align: center;
           color: #fff;
         }
+
         &:after {
           position: absolute;
           left: 0;
@@ -186,6 +184,7 @@ export default {
         }
       }
     }
+
     .search-input {
       width: 550px;
       height: 46px;
@@ -194,6 +193,7 @@ export default {
       border: 1px rgba(255, 255, 255, 0.2) solid;
       border-top: none;
       box-sizing: unset;
+
       input {
         flex: 1;
         height: 20px;
@@ -202,6 +202,7 @@ export default {
         border: 0;
         font-size: 16px;
       }
+
       .el-icon-search {
         cursor: pointer;
         font-size: 22px;
