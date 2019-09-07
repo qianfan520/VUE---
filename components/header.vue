@@ -3,11 +3,11 @@
       <!-- justify-content:space-between; 左右贴边对齐 -->
       <!-- 文档： https://element.eleme.cn/#/zh-CN/component/layout#dui-qi-fang-shi -->
       <el-row type="flex" class="main" justify="space-between">
+
           <!-- logo -->
           <div class="logo">
               <img src="http://157.122.54.189:9093/images/logo.jpg" alt="">
           </div>
-
 
           <el-row type="flex" class="navs">
               <!-- nuxt-link的作用和使用方式和router-link -->
@@ -18,8 +18,12 @@
           </el-row>
 
           <!-- 登录跳转 -->
-          <div>
-              <nuxt-link to="/user/login">登录 / 注册</nuxt-link>
+          <div v-if="!$store.state.user.userInfo.token">
+              <nuxt-link to="/user/login">登录 / 注册</nuxt-link> 
+          </div>
+          <div v-else>
+              <!-- 登录成功后显示用户名 -->
+                {{$store.state.user.userInfo.user.nickname}}
           </div>
       </el-row>
   </div>

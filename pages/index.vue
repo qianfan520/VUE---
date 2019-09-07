@@ -11,7 +11,7 @@
         <div
           class="banner-image"
           :style="`
-                background:url(${$axios.default.baseURL + item.url}) center center no-repeat;
+                background:url('${$axios.defaults.baseURL + item.url}') center center no-repeat;
                 background-size:contain contain;
                 `"></div>
       </el-carousel-item>
@@ -97,7 +97,7 @@ export default {
       url: "/scenics/banners" //管理后台
     }).then(res => {
       //获取轮播图的数组
-      // console.log(res) 可解构为下行代码
+       console.log(res) //可解构为下行代码
       const data = res.data.data;
       // const { data } = res.data;
 

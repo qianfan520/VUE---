@@ -77,7 +77,9 @@ export default {
                   method:'POST',
                   data:this.form
                 }).then(res =>{
-                     console.log(res)
+                //如何调用mutations下的setUserInfo方法
+                // commit接收两个参数,第一个是mutations参数方法名,第二个参数是数据
+                this.$store.commit('user/setUserInfo',res.data)
                 })
               }else{
                    console.log("验证失败")
