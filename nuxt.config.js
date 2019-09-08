@@ -56,7 +56,10 @@ export default {
    */
   plugins: [
     '@/plugins/element-ui',
-    { src: '@/plugins/localStorage.js', ssr: false }
+    // axios的拦截插件
+    // '@/plugins/axios',
+    //  本地存储的插件
+    { src: '@/plugins/localStorage', ssr: false }
   ],
 
   /*
